@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-docker-compose
+{
+	"name": "DEV",
+	"dockerComposeFile": [
+		"../compose.yml",
+		"compose.dev.yml"
+	],
+	"service": "arduino",
+	"workspaceFolder": "/workspace",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils": {
+			"configureZshAsDefaultShell": true
+		}
+	},
+	"forwardPorts": [
+		"mosquitto:1883",
+		"homeassistant:8123"
+	],
+	"postCreateCommand": "sudo apt update && sudo apt-get install -y mosquitto-clients && sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"platformio.platformio-ide",
+				"ms-vscode.cpptools-extension-pack"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"platformio-ide.projectsDir": "${workspaceFolder}/arduino"
+			}
+		}
+	}
+}

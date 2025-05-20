@@ -1,0 +1,29 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2-openssl
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    ports:
+      - 1883:1883
+  homeassistant:
+    privileged: true
+    image: ghcr.io/home-assistant/home-assistant:stable
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    volumes:
+      - ./homeassistant/configuration.yaml:/config/configuration.yaml
+      - homeassistant-data:/config
+    ports:
+      - 8123:8123
+    environment:
+      TZ: Europe/Copenhagen
+      DISABLE_JEMALLOC: true
+
+volumes:
+  mosquitto-data:
+  mosquitto-log:
+  homeassistant-data:

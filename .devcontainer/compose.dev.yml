@@ -1,0 +1,6 @@
+services:
+  arduino:
+    image: mcr.microsoft.com/vscode/devcontainers/python
+    volumes:
+      - .:/workspace:cached
+    command: sleep infinity

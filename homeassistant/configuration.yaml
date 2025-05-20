@@ -1,0 +1,41 @@
+# Config file for Home Assistant
+
+mqtt:
+  sensor:
+    - name: "Temperature"
+      unique_id: "greenhouse_temperature"
+      device_class: "temperature"
+      state_topic: "greenhouse/temperature"
+      state_class: "measurement"
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.value }}"
+      device: &greenhouse_device
+        identifiers: ["greenhouse"]
+        name: "greenhouse"
+        model: "greenhouse v1"
+        manufacturer: "greenhouse inc."
+        sw_version: "1.0.0"
+    - name: "Humidity"
+      unique_id: "greenhouse_humidity"
+      device_class: "humidity"
+      state_topic: "greenhouse/humidity"
+      state_class: "measurement"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.value }}"
+      device: *greenhouse_device
+    - name: "Soil moisture"
+      unique_id: "greenhouse_moisture"
+      device_class: "moisture"
+      state_topic: "greenhouse/moisture"
+      state_class: "measurement"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.value }}"
+      device: *greenhouse_device
+    - name: "Light"
+      unique_id: "greenhouse_light_level"
+      device_class: "illuminance"
+      state_topic: "greenhouse/light_level"
+      state_class: "measurement"
+      unit_of_measurement: "lx"
+      value_template: "{{ value_json.value }}"
+      device: *greenhouse_device
