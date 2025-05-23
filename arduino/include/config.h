@@ -25,3 +25,4 @@
 #define HUMIDITY_UNIT "%"
 #define MOISTURE_UNIT "%"
 #define LIGHT_UNIT "lux"
+#define MOTION_UNIT "boolean"

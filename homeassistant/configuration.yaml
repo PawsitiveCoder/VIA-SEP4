@@ -11,9 +11,9 @@ mqtt:
       value_template: "{{ value_json.value }}"
       device: &greenhouse_device
         identifiers: ["greenhouse"]
-        name: "greenhouse"
-        model: "greenhouse v1"
-        manufacturer: "greenhouse inc."
+        name: "Greenhouse"
+        model: "Greenhouse v1"
+        manufacturer: "Greenhouse Inc."
         sw_version: "1.0.0"
     - name: "Humidity"
       unique_id: "greenhouse_humidity"
@@ -38,4 +38,13 @@ mqtt:
       state_class: "measurement"
       unit_of_measurement: "lx"
       value_template: "{{ value_json.value }}"
+      device: *greenhouse_device
+  binary_sensor:
+    - name: "Motion"
+      unique_id: "greenhouse_motion"
+      device_class: "motion"
+      state_topic: "greenhouse/motion"
+      value_template: "{{ value_json.value }}"
+      payload_on: "1.00"
+      payload_off: "0.00"
       device: *greenhouse_device

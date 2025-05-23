@@ -7,6 +7,7 @@
 #include "temperature_humidity_sensor.h"
 #include "moisture_sensor.h"
 #include "light_sensor.h"
+#include "motion_sensor.h"
 
 typedef struct sensor_manager
 {
@@ -14,6 +15,7 @@ typedef struct sensor_manager
     temperature_humidity_sensor_t temperature_humidity_sensor;
     moisture_sensor_t moisture_sensor;
     light_sensor_t light_sensor;
+    motion_sensor_t motion_sensor;
 } sensor_manager;
 
 sensor_manager_t sensor_manager_create(void)
@@ -30,6 +32,7 @@ sensor_manager_t sensor_manager_create(void)
     _sensor_manager->temperature_humidity_sensor = temperature_humidity_sensor_create();
     _sensor_manager->moisture_sensor = moisture_sensor_create();
     _sensor_manager->light_sensor = light_sensor_create();
+    _sensor_manager->motion_sensor = motion_sensor_create();
 
     return _sensor_manager;
 }
@@ -42,6 +45,7 @@ void sensor_manager_destroy(sensor_manager_t self)
         temperature_humidity_sensor_destroy(self->temperature_humidity_sensor);
         moisture_sensor_destroy(self->moisture_sensor);
         light_sensor_destroy(self->light_sensor);
+        motion_sensor_destroy(self->motion_sensor);
 
         free(self);
     }
@@ -54,7 +58,7 @@ void sensor_manager_add_observer(sensor_manager_t self, observer_t observer)
 
 static const char *float_to_string(float value)
 {
-    char *string[32];
+    static char string[32];
     snprintf(string, sizeof(string), "%.2f", value);
     return string;
 }
@@ -86,4 +90,10 @@ void sensor_manager_read(sensor_manager_t self)
     char light_unit[10];
     light_sensor_get_data(self->light_sensor, &light_value, light_unit);
     subject_notify_all(self->subject, "light_level", float_to_string(light_value), light_unit);
+
+    // Motion
+    float motion_value;
+    char motion_unit[10];
+    motion_sensor_get_data(self->motion_sensor, &motion_value, motion_unit);
+    subject_notify_all(self->subject, "motion", float_to_string(motion_value), motion_unit);
 }
