@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "subject.h"
 
 #include "sensor_manager.h"
@@ -51,40 +52,38 @@ void sensor_manager_add_observer(sensor_manager_t self, observer_t observer)
     subject_add_observer(self->subject, observer);
 }
 
+static const char *float_to_string(float value)
+{
+    char *string[32];
+    snprintf(string, sizeof(string), "%.2f", value);
+    return string;
+}
+
 void sensor_manager_read(sensor_manager_t self)
 {
     // Air temperature and humidity
     float temperature_value;
-    char temperature_value_string[10];
     char temperature_unit[10];
     float humidity_value;
-    char humidity_value_string[10];
     char humidity_unit[10];
     temperature_humidity_sensor_get_data(
         self->temperature_humidity_sensor,
         &temperature_value,
         temperature_unit,
         &humidity_value,
-        humidity_unit
-    );
-    dtostrf(temperature_value, 4, 2, temperature_value_string);
-    dtostrf(humidity_value, 4, 2, humidity_value_string);
-    subject_notify_all(self->subject, "temperature", temperature_value_string, temperature_unit);
-    subject_notify_all(self->subject, "humidity", humidity_value_string, humidity_unit);
+        humidity_unit);
+    subject_notify_all(self->subject, "temperature", float_to_string(temperature_value), temperature_unit);
+    subject_notify_all(self->subject, "humidity", float_to_string(humidity_value), humidity_unit);
 
     // Soil moisture
     float moisture_value;
-    char moisture_value_string[10];
     char moisture_unit[10];
     moisture_sensor_get_data(self->moisture_sensor, &moisture_value, moisture_unit);
-    dtostrf(moisture_value, 4, 2, moisture_value_string);
-    subject_notify_all(self->subject, "moisture", moisture_value_string, moisture_unit);
+    subject_notify_all(self->subject, "moisture", float_to_string(moisture_value), moisture_unit);
 
     // Light
     float light_value;
-    char light_value_string[10];
     char light_unit[10];
     light_sensor_get_data(self->light_sensor, &light_value, light_unit);
-    dtostrf(light_value, 4, 2, light_value_string);
-    subject_notify_all(self->subject, "light_level", light_value_string, light_unit);
+    subject_notify_all(self->subject, "light_level", float_to_string(light_value), light_unit);
 }
