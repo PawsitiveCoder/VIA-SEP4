@@ -11,6 +11,10 @@ This repository contains an Arduino PlatformIO project with Python tooling and d
 
 This project focuses on greenhouse automation, utilizing sensors to monitor environmental conditions and controlling a pump to optimize plant growth. The system is designed to automate tasks such as irrigation and climate management, making greenhouse operation more efficient and reliable.
 
+## Hardware
+
+The hardware for this project, including the custom Arduino HAT, PCB layout diagrams, pin layout diagrams, and related documentation, is provided by the college. Refer to the `arduino/doc` directory for schematics, pinout diagrams, and assembly instructions. So are the drivers `arduino/lib/drivers` for the sensors used in this project, as well as their respective tests.
+
 ## Features
 
 - **PlatformIO** for Arduino firmware development and testing
