@@ -2,7 +2,7 @@
 #include "unity.h"
 #include "buttons.h"
 #include <util/delay.h>
-#include "pc_comm.h"
+#include "PC_Comm.h"
 #include <avr/io.h>
 #include "buzzer.h"
 #include "display.h"
@@ -66,16 +66,16 @@ void test_button_pressed()
     TEST_ASSERT_EQUAL(1, buttons_3_pressed());
 }
 
-void test_servo(){
-     TEST_MESSAGE("INFO! the servo should go to 0deg      :1:_:PASS\n");
-     servo(0);
+void test_servo()
+{
+    TEST_MESSAGE("INFO! the servo should go to 0deg      :1:_:PASS\n");
+    servo(0);
     TEST_MESSAGE("INFO! the servo should go to 90deg      :1:_:PASS\n");
     servo(90);
-        TEST_MESSAGE("INFO! the servo should go to 180deg      :1:_:PASS\n");
+    TEST_MESSAGE("INFO! the servo should go to 180deg      :1:_:PASS\n");
     servo(180);
 
-
-TEST_ASSERT_TRUE(1);
+    TEST_ASSERT_TRUE(1);
 }
 
 int main(void)
