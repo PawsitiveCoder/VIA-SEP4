@@ -5,7 +5,7 @@ VENV_DIR := $(ARDUINO_DIR)/$(VENV_NAME)
 REQ_FILE := $(ARDUINO_DIR)/requirements.txt
 PIO := $(VENV_NAME)/bin/platformio
 
-.PHONY: help venv venv-clean install setup build upload test test-target pre-commit-install pre-commit-run commit
+.PHONY: help venv venv-clean install setup build upload test test-target test-native pre-commit-install pre-commit-run commit
 
 help:
 	@echo "Available targets:"
@@ -18,6 +18,7 @@ help:
 	@echo "  upload             - Upload firmware to Arduino (target_run)"
 	@echo "  test               - Run all PlatformIO tests"
 	@echo "  test-target        - Run target (on-device) tests"
+	@echo "  test-native        - Run native (host) tests"
 	@echo "  pre-commit-install - Install pre-commit hooks"
 	@echo "  pre-commit-run     - Run pre-commit hooks on all files"
 	@echo "  commit             - Run Commitizen to create a conventional commit"
@@ -49,6 +50,9 @@ test:
 
 test-target:
 	cd $(ARDUINO_DIR) && $(PIO) test -e target_test
+
+test-native:
+	cd $(ARDUINO_DIR) && $(PIO) test -e native_test
 
 pre-commit-install:
 	$(VENV_DIR)/bin/pre-commit install

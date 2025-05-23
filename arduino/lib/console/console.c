@@ -4,9 +4,6 @@
 
 #include "console.h"
 
-#define BUILT_IN_CONSOLE USART_0
-#define BUILT_IN_CONSOLE_BAUD 9600
-
 static int initialized = 0;
 
 void console_init(void)
