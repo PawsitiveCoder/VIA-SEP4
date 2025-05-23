@@ -8,6 +8,11 @@ typedef struct observer
 
 observer_t observer_create(observer_callback_t callback)
 {
+    if (callback == NULL)
+    {
+        return NULL;
+    }
+
     observer_t _observer = calloc(1, sizeof(observer));
 
     if (_observer == NULL)
