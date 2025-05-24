@@ -1,7 +1,7 @@
-// filepath: /workspace/arduino/test/native/sensor/test_sensor_manager/test_sensor_manager.c
 #include <fff.h>
 #include <unity.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "sensor_manager.h"
 #include "subject.h"
@@ -9,7 +9,7 @@
 #include "moisture_sensor.h"
 #include "light_sensor.h"
 #include "motion_sensor.h"
-#include "stdio.h"
+#include "level_sensor.h"
 
 DEFINE_FFF_GLOBALS;
 
@@ -37,6 +37,11 @@ FAKE_VOID_FUNC(light_sensor_get_data, light_sensor_t, float *, char *);
 FAKE_VALUE_FUNC(motion_sensor_t, motion_sensor_create);
 FAKE_VOID_FUNC(motion_sensor_destroy, motion_sensor_t);
 FAKE_VOID_FUNC(motion_sensor_get_data, motion_sensor_t, float *, char *);
+
+// Water Level Sensor
+FAKE_VALUE_FUNC(level_sensor_t, level_sensor_create);
+FAKE_VOID_FUNC(level_sensor_destroy, level_sensor_t);
+FAKE_VOID_FUNC(level_sensor_get_data, level_sensor_t, float *, char *);
 
 void setUp(void)
 {
@@ -69,6 +74,12 @@ void setUp(void)
   motion_sensor_create_fake.return_val = (motion_sensor_t)0x5;
   RESET_FAKE(motion_sensor_destroy);
   RESET_FAKE(motion_sensor_get_data);
+
+  // Water Level Sensor
+  RESET_FAKE(level_sensor_create);
+  level_sensor_create_fake.return_val = (level_sensor_t)0x6;
+  RESET_FAKE(level_sensor_destroy);
+  RESET_FAKE(level_sensor_get_data);
 }
 
 void tearDown(void) {}
@@ -92,6 +103,7 @@ void test_sensor_manager_create_initializes_sensors(void)
   TEST_ASSERT_EQUAL(1, moisture_sensor_create_fake.call_count);
   TEST_ASSERT_EQUAL(1, light_sensor_create_fake.call_count);
   TEST_ASSERT_EQUAL(1, motion_sensor_create_fake.call_count);
+  TEST_ASSERT_EQUAL(1, level_sensor_create_fake.call_count);
 
   sensor_manager_destroy(sensor_manager);
 }
@@ -111,6 +123,7 @@ void test_sensor_manager_destroy_calls_all_destroys(void)
   TEST_ASSERT_EQUAL(1, moisture_sensor_destroy_fake.call_count);
   TEST_ASSERT_EQUAL(1, light_sensor_destroy_fake.call_count);
   TEST_ASSERT_EQUAL(1, motion_sensor_destroy_fake.call_count);
+  TEST_ASSERT_EQUAL(1, level_sensor_destroy_fake.call_count);
 }
 
 void test_sensor_manager_add_observer_calls_subject_add_observer(void)
@@ -130,7 +143,7 @@ void test_sensor_manager_read_gets_data_and_notifies(void)
   sensor_manager_t sensor_manager = sensor_manager_create();
 
   sensor_manager_read(sensor_manager);
-  TEST_ASSERT_EQUAL(5, subject_notify_all_fake.call_count);
+  TEST_ASSERT_EQUAL(6, subject_notify_all_fake.call_count);
 
   // Temperature and Humidity Sensor
   TEST_ASSERT_EQUAL(1, temperature_humidity_sensor_get_data_fake.call_count);
@@ -148,6 +161,10 @@ void test_sensor_manager_read_gets_data_and_notifies(void)
   // Motion Sensor
   TEST_ASSERT_EQUAL(1, motion_sensor_get_data_fake.call_count);
   TEST_ASSERT_EQUAL_STRING("motion", subject_notify_all_fake.arg1_history[4]);
+
+  // Water Level Sensor
+  TEST_ASSERT_EQUAL(1, level_sensor_get_data_fake.call_count);
+  TEST_ASSERT_EQUAL_STRING("water_level", subject_notify_all_fake.arg1_history[5]);
 
   sensor_manager_destroy(sensor_manager);
 }

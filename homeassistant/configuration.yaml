@@ -39,6 +39,14 @@ mqtt:
       unit_of_measurement: "lx"
       value_template: "{{ value_json.value }}"
       device: *greenhouse_device
+    - name: "Water level"
+      unique_id: "greenhouse_water_level"
+      device_class: "distance"
+      state_topic: "greenhouse/water_level"
+      state_class: "measurement"
+      unit_of_measurement: "mm"
+      value_template: "{{ value_json.value }}"
+      device: *greenhouse_device
   binary_sensor:
     - name: "Motion"
       unique_id: "greenhouse_motion"
