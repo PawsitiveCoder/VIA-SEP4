@@ -8,6 +8,23 @@
 #include "moisture_sensor.h"
 #include "light_sensor.h"
 #include "motion_sensor.h"
+#include "level_sensor.h"
+
+#ifdef TEST_NATIVE
+static const char *float_to_string(float value)
+{
+    static char string[32];
+    snprintf(string, sizeof(string), "%.2f", value);
+    return string;
+}
+#else
+static const char *float_to_string(float value)
+{
+    static char string[32];
+    dtostrf(value, 0, 2, string);
+    return string;
+}
+#endif
 
 typedef struct sensor_manager
 {
@@ -16,6 +33,7 @@ typedef struct sensor_manager
     moisture_sensor_t moisture_sensor;
     light_sensor_t light_sensor;
     motion_sensor_t motion_sensor;
+    level_sensor_t level_sensor;
 } sensor_manager;
 
 sensor_manager_t sensor_manager_create(void)
@@ -33,6 +51,7 @@ sensor_manager_t sensor_manager_create(void)
     _sensor_manager->moisture_sensor = moisture_sensor_create();
     _sensor_manager->light_sensor = light_sensor_create();
     _sensor_manager->motion_sensor = motion_sensor_create();
+    _sensor_manager->level_sensor = level_sensor_create();
 
     return _sensor_manager;
 }
@@ -46,6 +65,7 @@ void sensor_manager_destroy(sensor_manager_t self)
         moisture_sensor_destroy(self->moisture_sensor);
         light_sensor_destroy(self->light_sensor);
         motion_sensor_destroy(self->motion_sensor);
+        level_sensor_destroy(self->level_sensor);
 
         free(self);
     }
@@ -54,13 +74,6 @@ void sensor_manager_destroy(sensor_manager_t self)
 void sensor_manager_add_observer(sensor_manager_t self, observer_t observer)
 {
     subject_add_observer(self->subject, observer);
-}
-
-static const char *float_to_string(float value)
-{
-    static char string[32];
-    snprintf(string, sizeof(string), "%.2f", value);
-    return string;
 }
 
 void sensor_manager_read(sensor_manager_t self)
@@ -96,4 +109,10 @@ void sensor_manager_read(sensor_manager_t self)
     char motion_unit[10];
     motion_sensor_get_data(self->motion_sensor, &motion_value, motion_unit);
     subject_notify_all(self->subject, "motion", float_to_string(motion_value), motion_unit);
+
+    // Water level
+    float level_value;
+    char level_unit[10];
+    level_sensor_get_data(self->level_sensor, &level_value, level_unit);
+    subject_notify_all(self->subject, "water_level", float_to_string(level_value), level_unit);
 }

@@ -26,3 +26,7 @@
 #define MOISTURE_UNIT "%"
 #define LIGHT_UNIT "lux"
 #define MOTION_UNIT "boolean"
+#define WATER_LEVEL_UNIT "mm"
+
+// The mount height of the water level sensor in mm
+#define WATER_LEVEL_MOUNT_HEIGHT 100.00

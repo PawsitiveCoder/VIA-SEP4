@@ -5,7 +5,6 @@
 #include "motion_sensor.h"
 #include "pir.h"
 
-// FFF fake for pir_init
 DEFINE_FFF_GLOBALS;
 
 FAKE_VOID_FUNC(pir_init, pir_callback_t);
