@@ -13,7 +13,7 @@ This project focuses on greenhouse automation, utilizing sensors to monitor envi
 
 ## Hardware
 
-The hardware for this project, including the custom Arduino HAT, PCB layout diagrams, pin layout diagrams, and related documentation, is provided by the college. Refer to the `arduino/doc` directory for schematics, pinout diagrams, and assembly instructions. So are the drivers `arduino/lib/drivers` for the sensors used in this project, as well as their respective tests.
+The hardware for this project, including the custom Arduino HAT, PCB layout diagrams, pin layout diagrams, and related documentation, is provided by the college. Refer to the `arduino/doc` directory for schematics, pinout diagrams, and assembly instructions. So are most drivers `arduino/lib/drivers` for the sensors used in this project, as well as their respective tests.
 
 ## Features
 
@@ -24,43 +24,21 @@ The hardware for this project, including the custom Arduino HAT, PCB layout diag
 
 ## Getting Started
 
-### 1. Clone the repository
+1. Make sure you have [Docker](https://www.docker.com) installed and running.
+2. Clone the repository and cd into it.
+3. Open the project in [VS Code](https://code.visualstudio.com/) and click "Reopen in Container".
+4. Open the arduino workspace and reload once PlatformIO is done installing.
+5. Open a local terminal and run `make setup`. This will:
+    - Remove any existing Python venv
+    - Create a new venv in `arduino/.venv`
+    - Install Python requirements
+    - Set up pre-commit hooks
 
-```sh
-git clone <repo-url>
-cd <into-the-cloned-repository>
-```
+## Useful Make targets
 
-### 2. Open in Devcontainer (Recommended)
+- `make setup` - Recreate venv, install requirements, set up pre-commit hooks
+- `make upload-monitor` - Upload firmware and start serial monitor
+- `make test-native` - Run native (host) tests
 
-Open the project in [VS Code](https://code.visualstudio.com/) and use the "Reopen in Container" feature.
-
-### 3. Open the arduino workspace
-
-Open the arduino workspace so that PlatformIO recognizes the sub-folder and reload once installed.
-
-### 4. Open a local terminal and run
-
-```sh
-make setup
-```
-
-This will:
-
-- Remove any existing Python venv
-- Create a new venv in `arduino/.venv`
-- Install Python requirements
-- Set up pre-commit hooks
-
-## Common Make Targets
-
-- `make build` - Build Arduino firmware
-- `make upload` - Upload firmware to Arduino
-- `make test` - Run all PlatformIO tests
-- `make test-native` - Run native tests
-
-You can see all targets with:
-
-```sh
-make help
-```
+This targets are meant to be run from a local terminal (not devcontainer).
+You can learn more about the available make targets by running `make` in the root dir.

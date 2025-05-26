@@ -5,7 +5,7 @@ VENV_DIR := $(ARDUINO_DIR)/$(VENV_NAME)
 REQ_FILE := $(ARDUINO_DIR)/requirements.txt
 PIO := $(VENV_NAME)/bin/platformio
 
-.PHONY: help venv venv-clean install setup build upload test test-target test-native pre-commit-install pre-commit-run commit
+.PHONY: help venv venv-clean install setup build upload monitor upload-monitor test test-target test-native pre-commit-install pre-commit-run commit docs
 
 help:
 	@echo "Available targets:"
@@ -16,12 +16,15 @@ help:
 	@echo "  setup              - Setup Python venv and install requirements"
 	@echo "  build              - Build Arduino firmware (target_run)"
 	@echo "  upload             - Upload firmware to Arduino (target_run)"
+	@echo "  monitor            - Start serial monitor for (target_run)"
+	@echo "  upload-monitor     - Upload firmware and start serial monitor"
 	@echo "  test               - Run all PlatformIO tests"
 	@echo "  test-target        - Run target (on-device) tests"
 	@echo "  test-native        - Run native (host) tests"
 	@echo "  pre-commit-install - Install pre-commit hooks"
 	@echo "  pre-commit-run     - Run pre-commit hooks on all files"
 	@echo "  commit             - Run Commitizen to create a conventional commit"
+	@echo "  docs               - Generate code documentation"
 
 venv:
 	python3 -m venv $(VENV_DIR)
@@ -45,6 +48,11 @@ build:
 upload:
 	cd $(ARDUINO_DIR) && $(PIO) run -e target_run --target upload
 
+monitor:
+	cd $(ARDUINO_DIR) && $(PIO) device monitor -e target_run
+
+upload-monitor: upload monitor
+
 test:
 	cd $(ARDUINO_DIR) && $(PIO) test
 
@@ -64,3 +72,6 @@ pre-commit-run: venv
 
 commit:
 	$(VENV_DIR)/bin/cz commit
+
+docs:
+	cd $(ARDUINO_DIR) && doxygen Doxyfile
