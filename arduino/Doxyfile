@@ -1,0 +1,50 @@
+# Project related settings
+PROJECT_NAME           = "Greenhouse Monitoring System"
+PROJECT_BRIEF          = "AVR firmware for greenhouse monitoring."
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRS         = NO
+
+# Main page
+USE_MDFILE_AS_MAINPAGE = ../README.md
+
+# Input
+INPUT                  = src include lib README.md ../README.md
+FILE_PATTERNS          = *.c *.h
+RECURSIVE              = YES
+EXCLUDE                = .pio .vscode
+
+# Build related
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+# Source code browsing
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+# Documentation output
+GENERATE_HTML          = YES
+HTML_OUTPUT            = .
+GENERATE_LATEX         = NO
+GENERATE_MAN           = NO
+GENERATE_RTF           = NO
+GENERATE_XML           = NO
+
+# Warnings
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+
+# Dot tool (for call graphs, etc.)
+HAVE_DOT               = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+DOT_IMAGE_FORMAT       = svg
+
+# Misc
+QUIET                  = NO
+JAVADOC_AUTOBRIEF      = YES
+TAB_SIZE               = 4
+OPTIMIZE_OUTPUT_FOR_C  = YES
