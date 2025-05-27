@@ -2,10 +2,9 @@
 
 This repository contains an Arduino PlatformIO project with Python tooling and devcontainer support for streamlined local development.
 
-## Authors
+Authors: [Alex Tofan](https://github.com/savaryna), [Lucia Andronic](https://github.com/PawsitiveCoder)
 
-- [Alex Tofan](https://github.com/savaryna)
-- [Lucia Andronic](https://github.com/PawsitiveCoder)
+Links: [Code docs](https://pawsitivecoder.github.io/VIA-SEP4/index.html), [Test Coverage](https://pawsitivecoder.github.io/VIA-SEP4/coverage/index.html)
 
 ## Project Overview
 

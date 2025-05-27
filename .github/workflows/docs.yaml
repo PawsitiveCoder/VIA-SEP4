@@ -27,11 +27,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install make, python3-venv and doxygen
-        run: sudo apt-get update && sudo apt-get install -y make python3-venv doxygen
+      - name: Install make, python3-venv, doxygen and lcov
+        run: sudo apt-get update && sudo apt-get install -y make python3-venv doxygen lcov
       - name: Setup project
         run: make setup
-      - name: Generate docs using Doxygen
+      - name: Generate docs and coverage
         run: make docs
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -5,7 +5,7 @@ VENV_DIR := $(ARDUINO_DIR)/$(VENV_NAME)
 REQ_FILE := $(ARDUINO_DIR)/requirements.txt
 PIO := $(VENV_NAME)/bin/platformio
 
-.PHONY: help venv venv-clean install setup build upload monitor upload-monitor test test-target test-native pre-commit-install pre-commit-run commit docs
+.PHONY: help venv venv-clean install setup build upload monitor upload-monitor test test-target test-native test-coverage pre-commit-install pre-commit-run commit docs
 
 help:
 	@echo "Available targets:"
@@ -21,6 +21,7 @@ help:
 	@echo "  test               - Run all PlatformIO tests"
 	@echo "  test-target        - Run target (on-device) tests"
 	@echo "  test-native        - Run native (host) tests"
+	@echo "  test-coverage      - Generate code coverage report"
 	@echo "  pre-commit-install - Install pre-commit hooks"
 	@echo "  pre-commit-run     - Run pre-commit hooks on all files"
 	@echo "  commit             - Run Commitizen to create a conventional commit"
@@ -62,6 +63,17 @@ test-target:
 test-native:
 	cd $(ARDUINO_DIR) && $(PIO) test -e native_test
 
+test-coverage:
+	lcov --capture --include "*/lib/*" \
+		--directory $(ARDUINO_DIR)/.pio/build \
+		--base-directory $(ARDUINO_DIR) \
+		--output-file $(ARDUINO_DIR)/coverage.info
+	genhtml $(ARDUINO_DIR)/coverage.info \
+		--output-directory $(ARDUINO_DIR)/docs/coverage \
+		--legend --highlight --function-coverage \
+		--branch-coverage --show-details --sort
+	@echo "Coverage report generated in $(ARDUINO_DIR)/docs/coverage"
+
 pre-commit-install:
 	$(VENV_DIR)/bin/pre-commit install
 	@echo "pre-commit hooks installed"
@@ -75,3 +87,5 @@ commit:
 
 docs:
 	cd $(ARDUINO_DIR) && doxygen Doxyfile
+	@echo "Documentation generated in $(ARDUINO_DIR)/docs"
+	$(MAKE) test-coverage
