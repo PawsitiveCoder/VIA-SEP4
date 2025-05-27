@@ -17,7 +17,7 @@
 		"mosquitto:1883",
 		"homeassistant:8123"
 	],
-	"postCreateCommand": "sudo apt update && sudo apt-get install -y mosquitto-clients && sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*",
+	"postCreateCommand": "sudo apt update && sudo apt install -y mosquitto-clients lcov",
 	"customizations": {
 		"vscode": {
 			"extensions": [
