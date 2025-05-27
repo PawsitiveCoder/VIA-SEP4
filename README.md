@@ -1,3 +1,5 @@
+[![CI](https://github.com/PawsitiveCoder/VIA-SEP4/actions/workflows/ci.yaml/badge.svg)](https://github.com/PawsitiveCoder/VIA-SEP4/actions/workflows/ci.yaml) [![Deploy docs](https://github.com/PawsitiveCoder/VIA-SEP4/actions/workflows/docs.yaml/badge.svg)](https://github.com/PawsitiveCoder/VIA-SEP4/actions/workflows/docs.yaml)
+
 # VIA Semester 4 Project
 
 This repository contains an Arduino PlatformIO project with Python tooling and devcontainer support for streamlined local development.
