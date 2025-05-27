@@ -4,6 +4,11 @@
 #include "soil.h"
 #include "moisture_sensor.h"
 
+/// Minimum senosor reading (in air)
+static uint16_t dry_value = 534;
+/// Maximum sensor reading (in water)
+static uint16_t wet_value = 823;
+
 typedef struct moisture_sensor
 {
     float value;
@@ -41,10 +46,25 @@ void moisture_sensor_get_data(moisture_sensor_t self, float *value, char *unit)
     {
         return;
     }
-    
+
     *value = ERROR_VALUE;
     strcpy(unit, self->unit);
 
-    self->value = (soil_read() * 100) / 1023; // Convert to percentage
+    uint16_t raw_value = soil_read();
+
+    if (raw_value <= dry_value)
+    {
+        self->value = 0.0f;
+    }
+    else if (raw_value >= wet_value)
+    {
+        self->value = 100.0f;
+    }
+    else
+    {
+        // Linear interpolation between dry and wet values
+        self->value = ((float)(raw_value - dry_value) / (wet_value - dry_value)) * 100.0f;
+    }
+
     *value = self->value;
 }

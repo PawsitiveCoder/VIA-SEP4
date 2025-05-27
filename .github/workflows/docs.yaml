@@ -32,7 +32,7 @@ jobs:
       - name: Setup project
         run: make setup
       - name: Run native tests with coverage
-        run: make tesst-native
+        run: make test-native
       - name: Generate docs and coverage
         run: make docs
       - name: Setup Pages
