@@ -10,8 +10,9 @@
 #include "device.h"
 #include "console_observer.h"
 #include "mqtt_observer.h"
+#include "pump_observer.h"
 
-void _wifi(void)
+static void setup_wifi(void)
 {
     wifi_init();
     console_log("Connecting to WiFi...\n");
@@ -28,18 +29,12 @@ void _wifi(void)
     console_log("Connected to WiFi.\n");
 }
 
-void _mqtt_callback(char *topic, char *message, uint16_t length)
+static void setup_mqtt(MQTT_Client_t *client)
 {
-    console_log("Received message on topic %s\n", topic);
-}
-
-MQTT_Client_t _mqtt(void)
-{
-    MQTT_Client_t client;
-    mqtt_init(&client, MQTT_CLIENT_ID, MQTT_BROKER_IP, MQTT_BROKER_PORT, _mqtt_callback);
+    mqtt_init(client, MQTT_CLIENT_ID, MQTT_BROKER_IP, MQTT_BROKER_PORT, NULL);
     console_log("Connecting to MQTT broker...\n");
 
-    if (mqtt_connect(&client) != MQTT_OK)
+    if (mqtt_connect(client) != MQTT_OK)
     {
         console_log("Failed to connect to MQTT broker.\n");
         while (1)
@@ -49,31 +44,30 @@ MQTT_Client_t _mqtt(void)
     }
 
     console_log("Connected to MQTT broker.\n");
-
-    return client;
 }
 
 int main(void)
 {
     console_init();
-    _wifi();
-    MQTT_Client_t mqtt_client = _mqtt();
-    mqtt_subscribe(&mqtt_client, "greenhouse/commands");
+    setup_wifi();
+    MQTT_Client_t mqtt_client;
+    setup_mqtt(&mqtt_client);
 
-    device_t device = device_create(DEVICE_ID, DEVICE_VERSION);
+    device_t device = device_create(DEVICE_ID, DEVICE_VERSION, DEVICE_PROCESSING_INTERVAL);
 
     observer_t console_observer = console_observer_create();
     observer_t mqtt_observer = mqtt_observer_create(&mqtt_client);
+    observer_t pump_observer = pump_observer_create();
 
     device_add_observer(device, console_observer);
     device_add_observer(device, mqtt_observer);
+    device_add_observer(device, pump_observer);
+
+    device_process(device);
 
     while (1)
     {
         mqtt_process(&mqtt_client);
-        mqtt_publish(&mqtt_client, "greenhouse/status", "online", 6);
-        device_process(device);
-        _delay_ms(SENSOR_DELAY);
     }
 
     return 0;

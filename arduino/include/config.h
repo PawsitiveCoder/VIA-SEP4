@@ -4,6 +4,7 @@
 // Device configuration
 #define DEVICE_ID "greenhouse"
 #define DEVICE_VERSION "0.0.1"
+#define DEVICE_PROCESSING_INTERVAL 5000 // 5 seconds
 
 // Wi-Fi configuration
 #define WIFI_SSID "macbook"
@@ -13,9 +14,6 @@
 #define MQTT_CLIENT_ID DEVICE_ID
 #define MQTT_BROKER_IP "172.20.10.14"
 #define MQTT_BROKER_PORT 1883
-
-// Sensor configuration
-#define SENSOR_DELAY 5000 // 5 seconds
 
 // Common error value for all sensors
 #define ERROR_VALUE -999.99
