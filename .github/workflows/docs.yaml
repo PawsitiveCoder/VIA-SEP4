@@ -31,6 +31,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y make python3-venv doxygen lcov
       - name: Setup project
         run: make setup
+      - name: Run native tests with coverage
+        run: make tesst-native
       - name: Generate docs and coverage
         run: make docs
       - name: Setup Pages
